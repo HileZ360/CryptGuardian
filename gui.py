@@ -35,8 +35,8 @@ class UserAuthenticationGUI:
         self.root.title("User Authentication")
         self.root.geometry("400x420")
         self.root.resizable(False, False)
-        self.bm = BackgroundManager(root)
-        self.bm.set_background_image("background_image.jpg")
+        self.background_manager = BackgroundManager(root)
+        self.background_manager.set_background_image("background_image.jpg")
         self.create_login_gui()
 
     def create_login_gui(self):
@@ -65,12 +65,13 @@ class UserAuthenticationGUI:
         self.button_view_login_history = ttk.Button(self.frame, text="View Login History", width=15, command=self.view_login_history)
         self.button_view_login_history.grid(row=4, column=0, columnspan=2, pady=10, sticky="ew")
 
+
     def login(self):
         u, p = self.entry_username.get(), self.entry_password.get()
         if u and p:
             if self.authenticate(u, p):
                 self.root.withdraw()
-                welcome_window = WelcomeWindow(self.root, u)
+                welcome_window = WelcomeWindow(self.root, u, self.show_main_window)
             else:
                 messagebox.showerror("Error", "Incorrect username or password")
         else:
@@ -95,7 +96,7 @@ class UserAuthenticationGUI:
         button_register.grid(row=2, column=0, columnspan=2, pady=10, sticky="ew")
         button_show_tips = ttk.Button(frame_register, text="Show Password Tips", width=15, command=self.show_password_tips)
         button_show_tips.grid(row=3, column=0, columnspan=2, pady=10, sticky="ew")
-        register_window.protocol("WM_DELETE_WINDOW", lambda: register_window.destroy() or self.root.deiconify())
+        register_window.protocol("WM_DELETE_WINDOW", lambda: register_window.destroy() or self.show_main_window())
 
     def show_password_tips(self):
         messagebox.showinfo("Password Tips", "Choose a password that is at least 6 characters long and includes special characters.")
@@ -169,7 +170,8 @@ class UserAuthenticationGUI:
                     f.seek(0)
                     json.dump(data, f, indent=4)
                 messagebox.showinfo("Success", "User registered successfully!")
-                w.destroy()
+                w.withdraw()
+                self.show_main_window()
 
     def authenticate(self, u, p):
         if not os.path.exists("user_credentials.json"):
@@ -223,8 +225,11 @@ class UserAuthenticationGUI:
     def validate_password_complexity(self, p):
         return len(p) >= 6 and re.search(r'[!@#$%^&*()_+{}|:"<>?`~=\[\];\',./-]', p)
 
+    def show_main_window(self):
+        self.root.deiconify()
+
 class WelcomeWindow:
-    def __init__(self, parent, u):
+    def __init__(self, parent, u, on_logout_callback):
         self.parent = parent
         self.root = tk.Toplevel(parent)
         self.root.title("Welcome")
@@ -235,13 +240,14 @@ class WelcomeWindow:
         self.label_ram_usage = ttk.Label(self.frame, text="", font=("Helvetica", 12))
         self.label_ram_usage.pack()
         self.update_ram_usage()
-        self.button_logout = ttk.Button(self.frame, text="Logout", command=self.close_window)
+        self.button_logout = ttk.Button(self.frame, text="Logout", command=self.on_logout)
         self.button_logout.pack()
-        self.root.protocol("WM_DELETE_WINDOW", self.close_window)
+        self.root.protocol("WM_DELETE_WINDOW", self.on_logout)
+        self.on_logout_callback = on_logout_callback
 
-    def close_window(self):
-        self.parent.deiconify()
+    def on_logout(self):
         self.root.destroy()
+        self.on_logout_callback()
 
     def update_ram_usage(self):
         ram_usage = self.get_ram_usage()
@@ -256,3 +262,8 @@ class WelcomeWindow:
             free_memory = int(os.FreePhysicalMemory) // (1024 ** 2)
         used_memory = total_memory - free_memory
         return used_memory
+
+def main():
+    root = tk.Tk()
+    app = UserAuthenticationGUI(root)
+    root.mainloop()
