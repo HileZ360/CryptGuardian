@@ -32,7 +32,7 @@ class BackgroundManager:
 class UserAuthenticationGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("User Authentication")
+        self.root.title("CryptGuardian")
         self.root.geometry("400x420")
         self.root.resizable(False, False)
         self.background_manager = BackgroundManager(root)
