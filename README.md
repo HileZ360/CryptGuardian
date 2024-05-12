@@ -1,4 +1,4 @@
-# CryptGuardian
+# CryptGuardian by HileZ (https://t.me/h1lez)
 
 CryptGuardian is a user authentication and security management tool built with Python and Tkinter.
 
