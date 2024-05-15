@@ -118,10 +118,9 @@ def create_gui(page):
                     ft.Text("CryptGuardian", size=40, weight=ft.FontWeight.BOLD),
                     ft.Text(f"Welcome, {username}", size=30, weight=ft.FontWeight.BOLD),
                     key_field,
-                    check_key_button,
+                    ft.Row([check_key_button, github_button]),
                     key_status_text,
-                    key_info_text,
-                    github_button
+                    key_info_text
                 ],
                 spacing=10,
                 alignment=ft.MainAxisAlignment.CENTER
