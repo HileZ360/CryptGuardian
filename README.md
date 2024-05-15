@@ -1,56 +1,51 @@
 # CryptGuardian by HileZ (https://t.me/h1lez)
 
-CryptGuardian is a user authentication and security management tool built with Python and Tkinter.
+CryptGuardian is a user authentication and access management tool created with Python and the Flet GUI library.
 
-## Overview
+Overview:
 
-CryptGuardian provides a graphical user interface (GUI) for user authentication, registration, password management, and login history viewing. It ensures secure access to a system by implementing cryptographic methods for password storage and validation.
+CryptGuardian offers a user-friendly interface for administrators to manage access keys and for users to log in, register, and verify access using provided keys. It ensures secure access to resources by implementing cryptographic hashing for password storage and validation.
 
-## Features
+Features:
 
-- **User Authentication:** Users can log in securely using their username and password.
-- **User Registration:** New users can register with a unique username and password.
-- **Password Management:** Users can change their passwords, ensuring strong password complexity.
-- **Login History:** CryptGuardian keeps track of user login history, including timestamps, IP addresses, and hardware identifiers.
-- **Memory Usage Monitoring:** The program monitors memory usage to ensure efficient resource management.
+- Admin Panel: Allows administrators to add access keys with specified start and end dates.
+- User Authentication: Users can securely log in using their username and password.
+- User Registration: New users can register with a unique username and password.
+- Access Key Verification: Users can enter keys to check for access validity.
+- GitHub Integration: Provides a button to navigate users to the GitHub repository for CryptGuardian.
 
-## How it Works
+How it Works:
 
-1. **User Authentication:**
+1. Admin Panel:
+   - Administrators access the admin panel to add new access keys.
+   - They input the key, start date, end date, and access information.
+   - The program validates the input and adds the key to the list of keys stored in a JSON file.
+
+2. User Authentication and Registration:
    - Users enter their username and password in the provided fields.
-   - CryptGuardian verifies the entered credentials against stored user data in a JSON file.
-   - If the credentials are correct, the user is granted access to the system.
-   - Otherwise, an error message is displayed.
+   - CryptGuardian verifies the credentials against stored user data, utilizing hashed passwords for security.
+   - If the credentials are correct, users are granted access; otherwise, appropriate error messages are displayed.
+   - New users register by providing a unique username and a password meeting length requirements.
+   - Passwords are hashed before storage, ensuring security.
 
-2. **User Registration:**
-   - New users click the "Register" button and provide a unique username and password.
-   - CryptGuardian checks the username availability and password complexity.
-   - If the username is available and the password meets complexity requirements, the user is registered, and the credentials are stored securely in a JSON file.
-   - Otherwise, appropriate error messages are displayed.
+3. Access Key Verification:
+   - After logging in, users can input access keys to check for validity.
+   - The program compares the entered key against stored keys and displays access status and information accordingly.
 
-3. **Password Management:**
-   - Users click the "Change Password" button and enter their current and new passwords.
-   - CryptGuardian validates the current password, checks the complexity of the new password, and updates the password if all requirements are met.
-   - The updated credentials are securely stored in the JSON file.
+4. GitHub Integration:
+   - Users can navigate to the GitHub repository for CryptGuardian using a provided button.
+   - This integration allows users to access additional resources, contribute to the project, or provide feedback.
 
-4. **Login History:**
-   - Users can view their login history by clicking the "View Login History" button.
-   - CryptGuardian retrieves the login history data from a JSON file and displays it in a formatted message box.
-
-5. **Memory Usage Monitoring:**
-   - CryptGuardian continuously monitors memory usage using the WMI (Windows Management Instrumentation) library.
-   - It calculates the total memory and free memory available on the system.
-   - The program then displays the used memory in megabytes (MB) in the welcome window.
-
-## Requirements
+Requirements:
 
 - Python 3.x
-- Tkinter (standard Python interface to the Tk GUI toolkit)
-- Pillow (PIL Fork, Python Imaging Library)
-- WMI (Windows Management Instrumentation)
+- Flet (Python library for creating GUI applications)
+- hashlib (Python library for cryptographic hashing)
+- datetime (Python library for working with dates and times)
+- json (Python library for JSON manipulation)
 
-## Usage
+Usage:
 
-1. Clone the repository: `git clone https://github.com/HileZ360/CryptGuardian.git`
-2. Navigate to the project directory: `cd CryptGuardian`
-3. Run the application: `python main.py`
+1. Clone the repository: git clone https://github.com/HileZ360/CryptGuardian.git
+2. Navigate to the project directory: cd CryptGuardian
+3. Run the application: python main.py
