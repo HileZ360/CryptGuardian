@@ -1,7 +1,10 @@
-import tkinter as tk
-from gui import UserAuthenticationGUI
+import flet as ft
+from gui import create_gui
 
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = UserAuthenticationGUI(root)
-    root.mainloop()
+def main(page: ft.Page):
+    page.title = "CryptGuardian"
+    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+    page.vertical_alignment = ft.CrossAxisAlignment.CENTER
+    create_gui(page)
+
+ft.app(target=main)
