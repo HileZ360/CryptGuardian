@@ -1,71 +1,75 @@
 import json
 import flet as ft
+from utils import validate_date, load_json_file, save_json_file
+from security import hash_password
 
 KEYS_FILE = "keys.json"
 
-def load_keys():
-    try:
-        with open(KEYS_FILE, "r") as file:
-            return json.load(file)
-    except FileNotFoundError:
-        return {"keys": []}
+class AdminPanel:
+    def __init__(self, page):
+        self.page = page
+        self.page.title = "Admin Panel"
+        self.status_text = ft.Text(value="")
+        self.init_ui()
 
-def save_keys(data):
-    with open(KEYS_FILE, "w") as file:
-        json.dump(data, file, indent=4)
+    def load_keys(self):
+        return load_json_file(KEYS_FILE, {"keys": []})
 
-def create_admin_interface(page):
-    page.title = "Admin Panel"
+    def save_keys(self, data):
+        save_json_file(KEYS_FILE, data)
 
-    def add_key(e):
-        key = key_field.value
-        start_date = start_date_field.value
-        end_date = end_date_field.value
-        access_info = access_info_field.value
+    def add_key(self, e):
+        key = self.key_field.value.strip()
+        start_date = self.start_date_field.value.strip()
+        end_date = self.end_date_field.value.strip()
+        access_info = self.access_info_field.value.strip()
 
         if not key or not start_date or not end_date or not access_info:
-            status_text.value = "All fields are required."
+            self.status_text.value = "All fields are required."
+        elif not validate_date(start_date) or not validate_date(end_date):
+            self.status_text.value = "Invalid date format. Use YYYY-MM-DD."
         else:
-            keys = load_keys()
+            keys = self.load_keys()
             keys["keys"].append({
                 "key": key,
                 "start_date": start_date,
                 "end_date": end_date,
                 "access_info": access_info
             })
-            save_keys(keys)
-            status_text.value = "Key added successfully."
-            key_field.value = ""
-            start_date_field.value = ""
-            end_date_field.value = ""
-            access_info_field.value = ""
-        page.update()
+            self.save_keys(keys)
+            self.status_text.value = "Key added successfully."
+            self.key_field.value = ""
+            self.start_date_field.value = ""
+            self.end_date_field.value = ""
+            self.access_info_field.value = ""
+        self.page.update()
 
-    key_field = ft.TextField(label="Key")
-    start_date_field = ft.TextField(label="Start Date (YYYY-MM-DD)")
-    end_date_field = ft.TextField(label="End Date (YYYY-MM-DD)")
-    access_info_field = ft.TextField(label="Access Information")
+    def init_ui(self):
+        self.key_field = ft.TextField(label="Key")
+        self.start_date_field = ft.TextField(label="Start Date (YYYY-MM-DD)")
+        self.end_date_field = ft.TextField(label="End Date (YYYY-MM-DD)")
+        self.access_info_field = ft.TextField(label="Access Information")
 
-    add_key_button = ft.ElevatedButton(text="Add Key", on_click=add_key)
-    status_text = ft.Text(value="")
+        add_key_button = ft.ElevatedButton(text="Add Key", on_click=self.add_key)
 
-    page.add(
-        ft.Column(
-            [
-                ft.Text("Admin Panel", size=40, weight=ft.FontWeight.BOLD),
-                key_field,
-                start_date_field,
-                end_date_field,
-                access_info_field,
-                add_key_button,
-                status_text
-            ],
-            spacing=10,
-            alignment=ft.MainAxisAlignment.CENTER
+        self.page.add(
+            ft.Column(
+                [
+                    ft.Text("Admin Panel", size=40, weight=ft.FontWeight.BOLD),
+                    self.key_field,
+                    self.start_date_field,
+                    self.end_date_field,
+                    self.access_info_field,
+                    add_key_button,
+                    self.status_text
+                ],
+                spacing=10,
+                alignment=ft.MainAxisAlignment.CENTER
+            )
         )
-    )
 
 def main(page: ft.Page):
-    create_admin_interface(page)
+    AdminPanel(page)
 
-ft.app(target=main)
+if __name__ == "__main__":
+    ft.app(target=main)
