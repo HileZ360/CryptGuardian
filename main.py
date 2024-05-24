@@ -7,4 +7,5 @@ def main(page: ft.Page):
     page.vertical_alignment = ft.CrossAxisAlignment.CENTER
     create_gui(page)
 
-ft.app(target=main)
+if __name__ == "__main__":
+    ft.app(target=main)
