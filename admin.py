@@ -6,19 +6,27 @@ from security import hash_password
 KEYS_FILE = "keys.json"
 
 class AdminPanel:
-    def __init__(self, page):
+    def __init__(self, page: ft.Page):
         self.page = page
         self.page.title = "Admin Panel"
+        self.page.full_screen = True  # Set full screen mode
         self.status_text = ft.Text(value="")
         self.init_ui()
 
-    def load_keys(self):
-        return load_json_file(KEYS_FILE, {"keys": []})
+    def load_keys(self) -> dict:
+        try:
+            return load_json_file(KEYS_FILE, {"keys": []})
+        except Exception as e:
+            self.status_text.value = f"Error loading keys: {str(e)}"
+            return {"keys": []}
 
-    def save_keys(self, data):
-        save_json_file(KEYS_FILE, data)
+    def save_keys(self, data: dict):
+        try:
+            save_json_file(KEYS_FILE, data)
+        except Exception as e:
+            self.status_text.value = f"Error saving keys: {str(e)}"
 
-    def add_key(self, e):
+    def add_key(self, e: ft.ControlEvent):
         key = self.key_field.value.strip()
         start_date = self.start_date_field.value.strip()
         end_date = self.end_date_field.value.strip()
@@ -28,6 +36,8 @@ class AdminPanel:
             self.status_text.value = "All fields are required."
         elif not validate_date(start_date) or not validate_date(end_date):
             self.status_text.value = "Invalid date format. Use YYYY-MM-DD."
+        elif start_date > end_date:
+            self.status_text.value = "Start date must be before end date."
         else:
             keys = self.load_keys()
             keys["keys"].append({
