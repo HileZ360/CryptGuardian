@@ -15,9 +15,15 @@ button {
     transition: background-color 0.3s ease, transform 0.3s ease;
     padding: 10px 20px;
     margin: 5px;
+    border: none;
+    cursor: pointer;
 }
 
 button:hover {
     background-color: #555;
     color: #fff;
+}
+
+button:focus {
+    outline: none;
 }
