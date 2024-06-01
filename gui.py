@@ -9,38 +9,38 @@ LOGIN_HISTORY_FILE = "login_history.json"
 KEYS_FILE = "keys.json"
 
 class CryptGuardian:
-    def __init__(self, page):
+    def __init__(self, page: ft.Page):
         self.page = page
         self.page.title = "CryptGuardian"
         self.username = ""
         self.init_ui()
 
-    def load_user_credentials(self):
+    def load_user_credentials(self) -> dict:
         return load_json_file(USER_CREDENTIALS_FILE, {"users": []})
 
-    def save_user_credentials(self, data):
+    def save_user_credentials(self, data: dict):
         save_json_file(USER_CREDENTIALS_FILE, data)
 
-    def load_login_history(self):
+    def load_login_history(self) -> dict:
         return load_json_file(LOGIN_HISTORY_FILE, {"logins": []})
 
-    def save_login_history(self, data):
+    def save_login_history(self, data: dict):
         save_json_file(LOGIN_HISTORY_FILE, data)
 
-    def load_keys(self):
+    def load_keys(self) -> dict:
         return load_json_file(KEYS_FILE, {"keys": []})
 
-    def save_keys(self, data):
+    def save_keys(self, data: dict):
         save_json_file(KEYS_FILE, data)
 
-    def login(self, username, password):
+    def login(self, username: str, password: str) -> bool:
         users = self.load_user_credentials()["users"]
         return authenticate_user(users, username, password)
 
-    def register(self, username, password):
+    def register(self, username: str, password: str) -> tuple[bool, str]:
         return validate_user_credentials(username, password, self.load_user_credentials(), self.save_user_credentials)
 
-    def change_password(self, username, old_password, new_password):
+    def change_password(self, username: str, old_password: str, new_password: str) -> tuple[bool, str]:
         users = self.load_user_credentials()
         for user in users["users"]:
             if user["username"] == username and user["password"] == hash_password(old_password):
@@ -76,7 +76,7 @@ class CryptGuardian:
             )
         )
 
-    def on_login_click(self, e):
+    def on_login_click(self, e: ft.ControlEvent):
         username = self.username_field.value
         password = self.password_field.value
         if self.login(username, password):
@@ -87,21 +87,21 @@ class CryptGuardian:
             self.status_text.value = "Login failed. Please check your username and password."
             self.page.update()
 
-    def on_register_click(self, e):
+    def on_register_click(self, e: ft.ControlEvent):
         username = self.username_field.value
         password = self.password_field.value
         success, message = self.register(username, password)
         self.status_text.value = message
         self.page.update()
 
-    def on_change_password_click(self, e):
+    def on_change_password_click(self, e: ft.ControlEvent):
         old_password = self.old_password_field.value
         new_password = self.new_password_field.value
         success, message = self.change_password(self.username, old_password, new_password)
         self.password_status_text.value = message
         self.page.update()
 
-    def show_main_interface(self, username):
+    def show_main_interface(self, username: str):
         self.page.clean()
         self.username = username
 
@@ -115,7 +115,7 @@ class CryptGuardian:
         key_status_text = ft.Text(value="")
         key_info_text = ft.Text(value="")
 
-        def check_key(e):
+        def check_key(e: ft.ControlEvent):
             key_value = key_field.value.strip()
             keys = self.load_keys()["keys"]
             current_date = datetime.now().isoformat()[:10]
@@ -153,7 +153,7 @@ class CryptGuardian:
             )
         )
 
-def create_gui(page):
+def create_gui(page: ft.Page):
     CryptGuardian(page)
 
 if __name__ == "__main__":
