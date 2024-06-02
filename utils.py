@@ -3,7 +3,7 @@ import re
 
 def load_json_file(filename: str, default: dict) -> dict:
     try:
-        with open(filename, "r") as file:
+        with open(filename, "r", encoding="utf-8") as file:
             return json.load(file)
     except FileNotFoundError:
         print(f"File not found: {filename}. Using default data.")
@@ -17,8 +17,8 @@ def load_json_file(filename: str, default: dict) -> dict:
 
 def save_json_file(filename: str, data: dict):
     try:
-        with open(filename, "w") as file:
-            json.dump(data, file, indent=4)
+        with open(filename, "w", encoding="utf-8") as file:
+            json.dump(data, file, ensure_ascii=False, indent=4)
     except Exception as e:
         print(f"Error saving JSON file: {str(e)}")
 
