@@ -174,7 +174,7 @@ class CryptGuardian:
             ft.Text(f"CPU: {system_info['cpu']['model']}"),
             ft.Text(f"Cores: {system_info['cpu']['cores']}"),
             ft.Text(f"Threads: {system_info['cpu']['threads']}"),
-            ft.Text(f"Frequency: {system_info['cpu']['frequency']} MHz"),
+            ft.Text(f"CPU Frequency: {system_info['cpu']['frequency']} MHz"),
             ft.Text(f"Memory: {system_info['memory']['total'] // (1024 ** 3)} GB"),
             ft.Text(f"Available: {system_info['memory']['available'] // (1024 ** 3)} GB"),
             ft.Text(f"Disk Total: {system_info['disk']['total'] // (1024 ** 3)} GB"),
