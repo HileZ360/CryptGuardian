@@ -1,15 +1,19 @@
+# admin.py
 import json
 import flet as ft
 from utils import validate_date, load_json_file, save_json_file
 from security import hash_password
+import logging
 
 KEYS_FILE = "keys.json"
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class AdminPanel:
     def __init__(self, page: ft.Page):
         self.page = page
         self.page.title = "Admin Panel"
-        self.page.full_screen = True  # Set full screen mode
+        self.page.full_screen = True
         self.status_text = ft.Text(value="")
         self.init_ui()
 
@@ -17,6 +21,7 @@ class AdminPanel:
         try:
             return load_json_file(KEYS_FILE, {"keys": []})
         except Exception as e:
+            logging.error(f"Error loading keys: {str(e)}")
             self.status_text.value = f"Error loading keys: {str(e)}"
             return {"keys": []}
 
@@ -24,6 +29,7 @@ class AdminPanel:
         try:
             save_json_file(KEYS_FILE, data)
         except Exception as e:
+            logging.error(f"Error saving keys: {str(e)}")
             self.status_text.value = f"Error saving keys: {str(e)}"
 
     def add_key(self, e: ft.ControlEvent):
@@ -40,18 +46,21 @@ class AdminPanel:
             self.status_text.value = "Start date must be before end date."
         else:
             keys = self.load_keys()
-            keys["keys"].append({
-                "key": key,
-                "start_date": start_date,
-                "end_date": end_date,
-                "access_info": access_info
-            })
-            self.save_keys(keys)
-            self.status_text.value = "Key added successfully."
-            self.key_field.value = ""
-            self.start_date_field.value = ""
-            self.end_date_field.value = ""
-            self.access_info_field.value = ""
+            if any(k["key"] == key for k in keys["keys"]):
+                self.status_text.value = "Key already exists."
+            else:
+                keys["keys"].append({
+                    "key": key,
+                    "start_date": start_date,
+                    "end_date": end_date,
+                    "access_info": access_info
+                })
+                self.save_keys(keys)
+                self.status_text.value = "Key added successfully."
+                self.key_field.value = ""
+                self.start_date_field.value = ""
+                self.end_date_field.value = ""
+                self.access_info_field.value = ""
         self.page.update()
 
     def init_ui(self):
