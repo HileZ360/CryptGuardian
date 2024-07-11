@@ -1,8 +1,10 @@
+# gui.py
 import flet as ft
 import json
 import psutil
 import platform
 import GPUtil
+import logging
 from datetime import datetime
 from security import hash_password, validate_user_credentials, authenticate_user
 from utils import load_json_file, save_json_file
@@ -11,35 +13,40 @@ USER_CREDENTIALS_FILE = "user_credentials.json"
 LOGIN_HISTORY_FILE = "login_history.json"
 KEYS_FILE = "keys.json"
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
 def get_system_info():
-    info = {
-        "cpu": {
-            "model": platform.processor(),
-            "cores": psutil.cpu_count(logical=False),
-            "threads": psutil.cpu_count(logical=True),
-            "frequency": psutil.cpu_freq().current
-        },
-        "memory": {
-            "total": psutil.virtual_memory().total,
-            "available": psutil.virtual_memory().available
-        },
-        "disk": {
-            "total": psutil.disk_usage('/').total,
-            "free": psutil.disk_usage('/').free
-        },
-        "gpu": []
-    }
+    try:
+        info = {
+            "cpu": {
+                "model": platform.processor(),
+                "cores": psutil.cpu_count(logical=False),
+                "threads": psutil.cpu_count(logical=True),
+                "frequency": psutil.cpu_freq().current
+            },
+            "memory": {
+                "total": psutil.virtual_memory().total,
+                "available": psutil.virtual_memory().available
+            },
+            "disk": {
+                "total": psutil.disk_usage('/').total,
+                "free": psutil.disk_usage('/').free
+            },
+            "gpu": []
+        }
 
-    gpus = GPUtil.getGPUs()
-    for gpu in gpus:
-        info["gpu"].append({
-            "name": gpu.name,
-            "memory_total": gpu.memoryTotal,
-            "memory_free": gpu.memoryFree,
-            "memory_used": gpu.memoryUsed
-        })
-
-    return info
+        gpus = GPUtil.getGPUs()
+        for gpu in gpus:
+            info["gpu"].append({
+                "name": gpu.name,
+                "memory_total": gpu.memoryTotal,
+                "memory_free": gpu.memoryFree,
+                "memory_used": gpu.memoryUsed
+            })
+        return info
+    except Exception as e:
+        logging.error(f"Error getting system info: {e}")
+        return {}
 
 class CryptGuardian:
     def __init__(self, page: ft.Page):
@@ -166,10 +173,8 @@ class CryptGuardian:
         self.page.clean()
         self.username = username
 
-        # Get system information
         system_info = get_system_info()
 
-        # Create system info display
         system_info_display = ft.Column([
             ft.Text(f"CPU: {system_info['cpu']['model']}"),
             ft.Text(f"Cores: {system_info['cpu']['cores']}"),
@@ -185,12 +190,10 @@ class CryptGuardian:
             ]
         ])
 
-        # Key input field
         self.key_field = ft.TextField(label="Enter Key")
         self.key_status_text = ft.Text(value="")
         key_submit_button = ft.ElevatedButton(text="Submit Key", on_click=self.on_key_submit)
 
-        # Styling the components
         self.page.add(
             ft.Container(
                 content=ft.Column(
@@ -225,7 +228,6 @@ class CryptGuardian:
         )
 
     def create_cpu_usage_graph(self):
-        # Placeholder text representation of CPU usage
         cpu_percentages = psutil.cpu_percent(percpu=True)
         return ft.Text(f"CPU Usage: {psutil.cpu_percent()}%")
 
