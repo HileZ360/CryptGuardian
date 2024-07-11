@@ -1,40 +1,55 @@
 # 🎉 Welcome to **CryptGuardian** 🎉
 
-**CryptGuardian** is a powerful tool designed to ensure user security and authentication through a graphical interface. With its sleek design and robust features, it provides a seamless experience for both administrators and users.
+**CryptGuardian** is a cutting-edge tool designed to ensure **user security and authentication** through a sleek and intuitive graphical interface. With robust features and a user-friendly design, it offers a seamless experience for both administrators and users.
 
 ## ✨ Overview ✨
 
-### 🔐 Key Features:
-1. **Admin Panel**: Administrators can add and manage access keys with specified start and end dates, ensuring controlled access.
-2. **User Authentication**: Users can securely log in with their username and password, which are securely hashed.
-3. **User Registration**: New users can register, providing a unique username and a password that meets security requirements.
-4. **Access Key Verification**: After logging in, users can verify access keys to check their validity and get relevant access information.
-5. **System Information Display**: Users can view detailed system information, including CPU, memory, disk usage, and GPU details.
+### 🔐 Key Features
+1. **Admin Panel**: 🛠
+   - Administrators can **add and manage access keys** with specified start and end dates, ensuring controlled access and enhanced security.
+2. **User Authentication**: 🛡
+   - Users can securely **log in** with their username and password, which are securely hashed for maximum protection.
+3. **User Registration**: 📝
+   - New users can **register** by providing a unique username and a password that meets stringent security requirements.
+4. **Access Key Verification**: 🔑
+   - After logging in, users can verify access keys to check their validity and get relevant access information.
+5. **System Information Display**: 💻
+   - Users can view detailed **system information**, including CPU, memory, disk usage, and GPU details.
 
 ## 🎨 How It Works 🎨
 
-### 🛠 Admin Panel:
-- Administrators add access keys by entering key details, start date, end date, and access information.
-- The system validates the input and stores the keys in a JSON file.
+### 🛠 Admin Panel
+- **Adding Access Keys**:
+  - Administrators input key details, start date, end date, and access information.
+  - The system **validates the input** and stores the keys in a JSON file.
+  - This ensures **controlled access** and detailed monitoring of key usage.
 
-### 🛡 User Authentication and Registration:
-- Users enter their credentials, which are checked against stored data using hashed passwords for security.
-- New users can register by providing a username and password, which is hashed and stored securely.
+### 🛡 User Authentication and Registration
+- **Login Process**:
+  - Users enter their credentials, which are checked against stored data using **hashed passwords** for security.
+  - Successful login grants access, while incorrect credentials trigger appropriate error messages.
+- **Registration Process**:
+  - New users can register by providing a username and password.
+  - Passwords are hashed before storage, ensuring **maximum security**.
 
-### 🔑 Access Key Verification:
-- Users can input keys to check their validity against stored keys and view associated access information.
+### 🔑 Access Key Verification
+- **Key Verification**:
+  - Users input keys to check their validity against stored keys.
+  - The system displays access status and relevant information, ensuring transparency and security.
 
-### 🌐 GitHub Integration:
-- Users can navigate to the CryptGuardian GitHub repository for more resources, contributions, or feedback.
+### 🌐 GitHub Integration
+- **Seamless Navigation**:
+  - Users can navigate to the CryptGuardian GitHub repository for more resources, contributions, or feedback.
+  - This integration fosters community involvement and continuous improvement.
 
 ## 💻 Technical Requirements 💻
 
-- **Python 3.x**
-- **Flet Library**: For GUI creation
-- **psutil**: For system information
-- **GPUtil**: For GPU details
-- **bcrypt**: For password hashing
-- **JSON**: For data storage and manipulation
+- **Python 3.x**: Core programming language.
+- **Flet Library**: For creating the graphical user interface.
+- **psutil**: For gathering system information.
+- **GPUtil**: For detailed GPU information.
+- **bcrypt**: For secure password hashing.
+- **JSON**: For data storage and manipulation.
 
 ## 🚀 Usage 🚀
 
