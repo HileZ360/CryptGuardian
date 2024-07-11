@@ -1,18 +1,22 @@
+# security.py
 import bcrypt
 import re
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def hash_password(password: str) -> str:
     try:
         return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
     except Exception as e:
-        print(f"Error hashing password: {e}")
+        logging.error(f"Error hashing password: {e}")
         return None
 
 def check_password(hashed_password: str, password: str) -> bool:
     try:
         return bcrypt.checkpw(password.encode(), hashed_password.encode())
     except Exception as e:
-        print(f"Error checking password: {e}")
+        logging.error(f"Error checking password: {e}")
         return False
 
 def authenticate_user(users: list, username: str, password: str) -> bool:
