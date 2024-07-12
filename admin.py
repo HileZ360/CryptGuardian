@@ -1,8 +1,8 @@
 # admin.py
 import json
 import flet as ft
-from utils import validate_date, load_json_file, save_json_file
-from security import hash_password
+from infrastructure.utils import validate_date, load_json_file, save_json_file
+from domain.security import hash_password
 import logging
 
 KEYS_FILE = "keys.json"

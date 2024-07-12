@@ -1,6 +1,6 @@
 # main.py
 import flet as ft
-from gui import create_gui
+from presentation.gui import CryptGuardian
 import logging
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -11,7 +11,7 @@ def main(page: ft.Page):
     page.vertical_alignment = ft.CrossAxisAlignment.CENTER
     page.full_screen = True
     try:
-        create_gui(page)
+        CryptGuardian(page)
     except Exception as e:
         logging.error(f"Error creating GUI: {e}")
 
