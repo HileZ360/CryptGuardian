@@ -15,6 +15,12 @@
    - After logging in, users can verify access keys to check their validity and get relevant access information.
 5. **System Information Display**: 💻
    - Users can view detailed **system information**, including CPU, memory, disk usage, and GPU details.
+6. **Password Management**: 🔄
+   - Users can **change their passwords** securely, ensuring ongoing protection of their accounts.
+7. **Login History**: 📜
+   - Users and administrators can **view login history** for auditing and security purposes.
+8. **Brute Force Protection**: 🛡
+   - Enhanced security measures to protect against brute force attacks.
 
 ## 🎨 How It Works 🎨
 
@@ -36,6 +42,24 @@
 - **Key Verification**:
   - Users input keys to check their validity against stored keys.
   - The system displays access status and relevant information, ensuring transparency and security.
+
+### 💻 System Information Display
+- **Viewing System Info**:
+  - Users can access detailed system information including CPU model, core and thread count, memory usage, disk space, and GPU details.
+  - This information helps in monitoring system performance and resources.
+
+### 🔄 Password Management
+- **Changing Password**:
+  - Users can change their password by providing the old password and setting a new one.
+  - The system ensures the new password meets security requirements and updates it securely.
+
+### 📜 Login History
+- **Viewing Login History**:
+  - Users and administrators can view the login history to monitor access and detect any suspicious activity.
+
+### 🛡 Brute Force Protection
+- **Enhanced Security**:
+  - The system includes measures to protect against brute force attacks, such as logging attempts and locking accounts after repeated failures.
 
 ### 🌐 GitHub Integration
 - **Seamless Navigation**:
