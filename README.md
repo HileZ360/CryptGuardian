@@ -80,6 +80,7 @@
 1. **Clone the Repository**: `git clone https://github.com/HileZ360/CryptGuardian.git`
 2. **Navigate to Project Directory**: `cd CryptGuardian`
 3. **Run the Application**: `python main.py`
+or use **pip install -r requirements.txt**
 
 For detailed information and the source code, you can visit the [CryptGuardian GitHub repository](https://github.com/HileZ360/CryptGuardian).
 
