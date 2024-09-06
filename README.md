@@ -86,4 +86,4 @@ For detailed information and the source code, you can visit the [CryptGuardian G
 
 ## 🌟 Future Enhancements 🌟
 
-Future enhancements could include extending the functionality to integrate with other systems, improving the user interface, and adding more detailed system monitoring capabilities.
+Future enhancements could include extending the functionality to integrate with other systems, improving the user interface, and adding more detailed system monitoring capabilities, fix scaling for different screens, improved password strength check during registration.
