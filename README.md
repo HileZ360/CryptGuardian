@@ -63,6 +63,16 @@ While JSON files are easy for smaller projects, transitioning to a robust databa
 
 ---
 
+### ⚠ Possible Issues and Solutions
+Missing distutils.spawn on Python 3.12
+
+Some packages (like GPUtil) may depend on distutils. If you get an error about distutils.spawn not found, installing or upgrading setuptools often solves it:
+   ```bash
+pip install --upgrade setuptools
+```
+
+---
+
 ## 🚀 Getting Started
 
 ### 📦 requirements.txt
