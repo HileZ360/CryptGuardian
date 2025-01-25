@@ -1,4 +1,5 @@
-![]([https://example.com/logo.png](https://github.com/HileZ360/CryptGuardian/blob/main/background_image.jpg))
+![](https://github.com/HileZ360/CryptGuardian/blob/main/background_image.jpg?raw=true)
+
 
 # 🎉 Welcome to **CryptGuardian** 🎉
 
