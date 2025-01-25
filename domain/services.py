@@ -1,10 +1,9 @@
-# domain/services.py
 import platform
 import psutil
 import GPUtil
 from domain.models import CPU, Memory, Disk, GPU, SystemInfo
 from infrastructure.utils import load_json_file, save_json_file
-from domain.security import hash_password, authenticate_user
+from domain.security import hash_password, authenticate_user, check_password
 
 USER_CREDENTIALS_FILE = "user_credentials.json"
 
@@ -48,7 +47,7 @@ class UserService:
 
     def change_password(self, users: dict, username: str, old_password: str, new_password: str) -> tuple[bool, str]:
         for user in users["users"]:
-            if user["username"] == username and user["password"] == hash_password(old_password):
+            if user["username"] == username and check_password(user["password"], old_password):
                 if len(new_password) < 8:
                     return False, "New password too short."
                 user["password"] = hash_password(new_password)
