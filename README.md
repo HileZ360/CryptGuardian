@@ -1,89 +1,70 @@
 # 🎉 Welcome to **CryptGuardian** 🎉
 
-**CryptGuardian** is a cutting-edge tool designed to ensure **user security and authentication** through a sleek and intuitive graphical interface. With robust features and a user-friendly design, it offers a seamless experience for both administrators and users.
+**CryptGuardian** is a comprehensive security-focused application providing a user-friendly **GUI** for authentication, key management, and system information display. Below is an in-depth overview of its functionality, technical details, and future enhancements.
 
-## ✨ Overview ✨
+---
 
-### 🔐 Key Features
-1. **Admin Panel**: 🛠
-   - Administrators can **add and manage access keys** with specified start and end dates, ensuring controlled access and enhanced security.
-2. **User Authentication**: 🛡
-   - Users can securely **log in** with their username and password, which are securely hashed for maximum protection.
-3. **User Registration**: 📝
-   - New users can **register** by providing a unique username and a password that meets stringent security requirements.
-4. **Access Key Verification**: 🔑
-   - After logging in, users can verify access keys to check their validity and get relevant access information.
-5. **System Information Display**: 💻
-   - Users can view detailed **system information**, including CPU, memory, disk usage, and GPU details.
-6. **Password Management**: 🔄
-   - Users can **change their passwords** securely, ensuring ongoing protection of their accounts.
-7. **Login History**: 📜
-   - Users and administrators can **view login history** for auditing and security purposes.
-8. **Brute Force Protection**: 🛡
-   - Enhanced security measures to protect against brute force attacks.
+## 🔒 Project Overview
 
-## 🎨 How It Works 🎨
+### 🛡 Key Features
 
-### 🛠 Admin Panel
-- **Adding Access Keys**:
-  - Administrators input key details, start date, end date, and access information.
-  - The system **validates the input** and stores the keys in a JSON file.
-  - This ensures **controlled access** and detailed monitoring of key usage.
+1. **User Authentication**: Secure login with **bcrypt** password hashing, plus brute force protection with account lockouts.  
+2. **User Registration**: Enforces unique usernames and ensures basic password requirements.  
+3. **Admin Panel**: Add/manage **access keys** with start/end dates and access info.  
+4. **System Info**: Retrieve CPU, memory, disk, and GPU stats (via `psutil` and `GPUtil`).  
+5. **Password Management**: Users can securely change their passwords by confirming their old one.  
+6. **Login History**: Stores successful/failed attempts in a JSON log.  
+7. **Brute Force Protection**: Tracks login failures and temporarily locks accounts after excessive attempts.
 
-### 🛡 User Authentication and Registration
-- **Login Process**:
-  - Users enter their credentials, which are checked against stored data using **hashed passwords** for security.
-  - Successful login grants access, while incorrect credentials trigger appropriate error messages.
-- **Registration Process**:
-  - New users can register by providing a username and password.
-  - Passwords are hashed before storage, ensuring **maximum security**.
+### 🏗 Project Structure
 
-### 🔑 Access Key Verification
-- **Key Verification**:
-  - Users input keys to check their validity against stored keys.
-  - The system displays access status and relevant information, ensuring transparency and security.
+- **domain/models.py**  
+  Defines data models for CPU, Memory, Disk, GPU, SystemInfo, and User.  
 
-### 💻 System Information Display
-- **Viewing System Info**:
-  - Users can access detailed system information including CPU model, core and thread count, memory usage, disk space, and GPU details.
-  - This information helps in monitoring system performance and resources.
+- **domain/security.py**  
+  Handles password hashing/checking, user authentication, brute force prevention.  
 
-### 🔄 Password Management
-- **Changing Password**:
-  - Users can change their password by providing the old password and setting a new one.
-  - The system ensures the new password meets security requirements and updates it securely.
+- **domain/services.py**  
+  Orchestrates system info retrieval, user credential loading/saving, and password changes.  
 
-### 📜 Login History
-- **Viewing Login History**:
-  - Users and administrators can view the login history to monitor access and detect any suspicious activity.
+- **infrastructure/utils.py**  
+  Provides JSON file I/O utilities (load, save) with basic validation and error handling.  
 
-### 🛡 Brute Force Protection
-- **Enhanced Security**:
-  - The system includes measures to protect against brute force attacks, such as logging attempts and locking accounts after repeated failures.
+- **presentation/gui.py**  
+  Implements the main GUI flow (login, registration, system info display, key verification).  
 
-### 🌐 GitHub Integration
-- **Seamless Navigation**:
-  - Users can navigate to the CryptGuardian GitHub repository for more resources, contributions, or feedback.
-  - This integration fosters community involvement and continuous improvement.
+- **admin.py**  
+  A separate admin interface allowing administrators to add and manage access keys.  
 
-## 💻 Technical Requirements 💻
+- **main.py**  
+  Entry point for launching CryptGuardian’s main user interface (login, system info, key verification).  
 
-- **Python 3.x**: Core programming language.
-- **Flet Library**: For creating the graphical user interface.
-- **psutil**: For gathering system information.
-- **GPUtil**: For detailed GPU information.
-- **bcrypt**: For secure password hashing.
-- **JSON**: For data storage and manipulation.
+### ⚙ How It Works
 
-## 🚀 Usage 🚀
+1. **Authentication & Registration**  
+   - Passwords are stored only after being **bcrypt-hashed**.  
+   - On login, the system checks credentials and logs any failures.  
+2. **Key Verification**  
+   - Users submit a key; the system checks `data/keys.json` and displays validity info.  
+3. **System Information**  
+   - Displays real-time CPU, memory, disk usage, and GPU details.  
+4. **Password Reset**  
+   - Validates old password, checks new password length, then replaces the stored hash.  
+5. **Brute Force Protection**  
+   - Maintains a global dictionary to count failed logins. Locks accounts after multiple failures until a timeout expires.  
 
-1. **Clone the Repository**: `git clone https://github.com/HileZ360/CryptGuardian.git`
-2. **Navigate to Project Directory**: `cd CryptGuardian`
-3. **Run the Application**: `python main.py`
-or use **pip install -r requirements.txt**
+### 📝 Data Storage
 
-For detailed information and the source code, you can visit the [CryptGuardian GitHub repository](https://github.com/HileZ360/CryptGuardian).
+- **user_credentials.json**: Stores usernames and hashed passwords.  
+- **data/keys.json**: Maintains access keys.  
+- **login_history.json**: Contains a record of login attempts.  
 
-## 🌟 Future Enhancements 🌟
+While JSON files are easy for smaller projects, transitioning to a robust database with encryption is recommended for production.
 
-Future enhancements could include extending the functionality to integrate with other systems, improving the user interface, and adding more detailed system monitoring capabilities, fix scaling for different screens, improved password strength check during registration.
+---
+
+## 🚀 Getting Started
+
+ **Clone the Repository**  
+   ```bash
+   git clone https://github.com/HileZ360/CryptGuardian.git
