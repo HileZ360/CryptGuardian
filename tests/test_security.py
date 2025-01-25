@@ -1,4 +1,3 @@
-# tests/test_security.py
 import pytest
 from domain.security import hash_password, check_password, authenticate_user, validate_user_credentials
 
@@ -17,7 +16,7 @@ def test_authenticate_user():
 
 def test_validate_user_credentials():
     user_data = {"users": []}
-    save_function = lambda x: None  # Mock save function
+    save_function = lambda x: None
     assert validate_user_credentials("newuser", "securepassword", user_data, save_function) == (True, "Registration successful.")
     assert validate_user_credentials("newuser", "short", user_data, save_function) == (False, "Password too short.")
     user_data["users"].append({"username": "newuser", "password": hash_password("securepassword")})
