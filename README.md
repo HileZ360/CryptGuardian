@@ -73,7 +73,7 @@ flet>=0.24.0
 psutil>=5.9.4
 GPUtil>=1.4.0
 pytest>=7.2.0
-
+```
  **Clone the Repository**  
    ```bash
    git clone https://github.com/HileZ360/CryptGuardian.git
