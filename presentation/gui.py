@@ -1,4 +1,3 @@
-# presentation/gui.py
 import flet as ft
 import logging
 from datetime import datetime
@@ -6,12 +5,13 @@ from domain.security import authenticate_user, validate_user_credentials
 from infrastructure.utils import load_json_file, save_json_file
 from domain.models import User, SystemInfo
 from domain.services import SystemInfoService, UserService
+import html
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 USER_CREDENTIALS_FILE = "user_credentials.json"
 LOGIN_HISTORY_FILE = "login_history.json"
-KEYS_FILE = "keys.json"
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(asctime)s - %(message)s')
+KEYS_FILE = "data/keys.json"
 
 class CryptGuardian:
     def __init__(self, page: ft.Page):
@@ -53,18 +53,29 @@ class CryptGuardian:
         return self.user_service.change_password(users, username, old_password, new_password)
 
     def init_ui(self):
-        self.page.add(ft.Image(src="background_image.jpg", width=800, height=600))
+        self.page.add(ft.Image(src="background_image.jpg", width=1920, height=396))
 
-        self.username_field = ft.TextField(label="Username", bgcolor=ft.colors.BLACK87)
-        self.password_field = ft.TextField(label="Password", password=True, bgcolor=ft.colors.BLACK87)
-        self.status_text = ft.Text(value="")
+        # Поля ввода с слегка прозрачным фоном, подстраиваются под тему
+        self.username_field = ft.TextField(
+            label="Username",
+            bgcolor=ft.Colors.with_opacity(0.06, ft.Colors.ON_SURFACE),
+            color=ft.Colors.ON_SURFACE
+        )
+        self.password_field = ft.TextField(
+            label="Password",
+            password=True,
+            bgcolor=ft.Colors.with_opacity(0.06, ft.Colors.ON_SURFACE),
+            color=ft.Colors.ON_SURFACE
+        )
+
+        self.status_text = ft.Text(value="", color=ft.Colors.ON_SURFACE_VARIANT)
 
         login_button = ft.ElevatedButton(
             text="Login",
             on_click=self.on_login_click,
             style=ft.ButtonStyle(
-                color=ft.colors.WHITE,
-                bgcolor=ft.colors.BLUE,
+                color=ft.Colors.ON_PRIMARY,
+                bgcolor=ft.Colors.PRIMARY,
                 shape=ft.RoundedRectangleBorder(radius=10)
             )
         )
@@ -72,17 +83,23 @@ class CryptGuardian:
             text="Register",
             on_click=self.on_register_click,
             style=ft.ButtonStyle(
-                color=ft.colors.WHITE,
-                bgcolor=ft.colors.GREEN,
+                color=ft.Colors.ON_PRIMARY,
+                bgcolor=ft.Colors.SECONDARY,
                 shape=ft.RoundedRectangleBorder(radius=10)
             )
         )
 
+        # Основной контейнер с нейтральным цветом, адаптирующимся к теме
         self.page.add(
             ft.Container(
                 content=ft.Column(
                     [
-                        ft.Text("CryptGuardian", size=50, weight=ft.FontWeight.BOLD, color=ft.colors.PURPLE),
+                        ft.Text(
+                            "CryptGuardian",
+                            size=50,
+                            weight=ft.FontWeight.BOLD,
+                            color=ft.Colors.ON_SURFACE
+                        ),
                         self.username_field,
                         self.password_field,
                         login_button,
@@ -93,10 +110,10 @@ class CryptGuardian:
                     alignment=ft.MainAxisAlignment.CENTER
                 ),
                 padding=20,
-                bgcolor=ft.colors.BLACK87,
                 border_radius=15,
-                shadow=ft.BoxShadow(blur_radius=10, spread_radius=2, color=ft.colors.GREY),
-                expand=True
+                bgcolor=ft.Colors.SURFACE,
+                expand=True,
+                shadow=ft.BoxShadow(blur_radius=10, spread_radius=2, color=ft.Colors.with_opacity(0.2, ft.Colors.BLACK)),
             )
         )
 
@@ -136,41 +153,70 @@ class CryptGuardian:
         system_info = self.system_info_service.get_system_info()
 
         system_info_display = ft.Column([
-            ft.Text(f"CPU: {system_info.cpu.model}"),
-            ft.Text(f"Cores: {system_info.cpu.cores}"),
-            ft.Text(f"Threads: {system_info.cpu.threads}"),
-            ft.Text(f"CPU Frequency: {system_info.cpu.frequency} MHz"),
-            ft.Text(f"Memory: {system_info.memory.total // (1024 ** 3)} GB"),
-            ft.Text(f"Available: {system_info.memory.available // (1024 ** 3)} GB"),
-            ft.Text(f"Disk Total: {system_info.disk.total // (1024 ** 3)} GB"),
-            ft.Text(f"Disk Free: {system_info.disk.free // (1024 ** 3)} GB"),
+            ft.Text(f"CPU: {system_info.cpu.model}", color=ft.Colors.ON_SURFACE),
+            ft.Text(f"Cores: {system_info.cpu.cores}", color=ft.Colors.ON_SURFACE),
+            ft.Text(f"Threads: {system_info.cpu.threads}", color=ft.Colors.ON_SURFACE),
+            ft.Text(f"CPU Frequency: {system_info.cpu.frequency} MHz", color=ft.Colors.ON_SURFACE),
+            ft.Text(f"Memory: {system_info.memory.total // (1024 ** 3)} GB", color=ft.Colors.ON_SURFACE),
+            ft.Text(f"Available: {system_info.memory.available // (1024 ** 3)} GB", color=ft.Colors.ON_SURFACE),
+            ft.Text(f"Disk Total: {system_info.disk.total // (1024 ** 3)} GB", color=ft.Colors.ON_SURFACE),
+            ft.Text(f"Disk Free: {system_info.disk.free // (1024 ** 3)} GB", color=ft.Colors.ON_SURFACE),
             *[
-                ft.Text(f"GPU: {gpu.name}, Memory: {gpu.memory_total} MB, Free: {gpu.memory_free} MB")
+                ft.Text(
+                    f"GPU: {gpu.name}, Memory: {gpu.memory_total} MB, Free: {gpu.memory_free} MB",
+                    color=ft.Colors.ON_SURFACE
+                )
                 for gpu in system_info.gpu
             ]
         ])
 
-        self.key_field = ft.TextField(label="Enter Key")
-        self.key_status_text = ft.Text(value="")
-        key_submit_button = ft.ElevatedButton(text="Submit Key", on_click=self.on_key_submit)
+        self.key_field = ft.TextField(
+            label="Enter Key",
+            bgcolor=ft.Colors.with_opacity(0.06, ft.Colors.ON_SURFACE),
+            color=ft.Colors.ON_SURFACE
+        )
+        self.key_status_text = ft.Text(value="", color=ft.Colors.ON_SURFACE_VARIANT)
+        key_submit_button = ft.ElevatedButton(
+            text="Submit Key",
+            on_click=self.on_key_submit,
+            style=ft.ButtonStyle(
+                color=ft.Colors.ON_PRIMARY,
+                bgcolor=ft.Colors.PRIMARY_CONTAINER,
+                shape=ft.RoundedRectangleBorder(radius=10)
+            )
+        )
 
         self.page.add(
             ft.Container(
                 content=ft.Column(
                     [
-                        ft.Text("CryptGuardian", size=50, weight=ft.FontWeight.BOLD, color=ft.colors.BLUE),
-                        ft.Text(f"Welcome, {username}", size=30, weight=ft.FontWeight.BOLD, color=ft.colors.GREEN),
+                        ft.Text(
+                            "CryptGuardian",
+                            size=50,
+                            weight=ft.FontWeight.BOLD,
+                            color=ft.Colors.ON_SURFACE
+                        ),
+                        ft.Text(
+                            f"Welcome, {username}",
+                            size=30,
+                            weight=ft.FontWeight.BOLD,
+                            color=ft.Colors.ON_SURFACE
+                        ),
                         ft.ElevatedButton(
                             text="Toggle System Info",
                             on_click=self.toggle_system_info,
                             style=ft.ButtonStyle(
-                                color=ft.colors.WHITE,
-                                bgcolor=ft.colors.PURPLE,
+                                color=ft.Colors.ON_PRIMARY,
+                                bgcolor=ft.Colors.PRIMARY,
                                 shape=ft.RoundedRectangleBorder(radius=10)
                             ),
                         ),
                         system_info_display if self.system_info_visible else ft.Container(),
-                        ft.Container(padding=10, content=self.create_cpu_usage_graph(), border=ft.BorderSide(1, ft.colors.GREY)),
+                        ft.Container(
+                            padding=10,
+                            content=self.create_cpu_usage_graph(),
+                            border=ft.BorderSide(1, ft.Colors.with_opacity(0.2, ft.Colors.BLACK))
+                        ),
                         self.key_field,
                         key_submit_button,
                         self.key_status_text
@@ -180,23 +226,28 @@ class CryptGuardian:
                     expand=True
                 ),
                 padding=20,
-                bgcolor=ft.colors.BLACK87,
                 border_radius=15,
-                shadow=ft.BoxShadow(blur_radius=10, spread_radius=2, color=ft.colors.GREY),
+                bgcolor=ft.Colors.SURFACE,
+                shadow=ft.BoxShadow(blur_radius=10, spread_radius=2, color=ft.Colors.with_opacity(0.2, ft.Colors.BLACK)),
                 expand=True
             )
         )
 
     def create_cpu_usage_graph(self):
         cpu_percentages = self.system_info_service.get_cpu_usage()
-        return ft.Text(f"CPU Usage: {cpu_percentages}%")
+        return ft.Text(f"CPU Usage: {cpu_percentages}%", color=ft.Colors.ON_SURFACE)
 
     def on_key_submit(self, e: ft.ControlEvent):
         key = self.key_field.value.strip()
         keys_data = self.load_keys()
         for key_data in keys_data["keys"]:
             if key_data["key"] == key:
-                self.key_status_text.value = f"Key: {key}\nStart Date: {key_data['start_date']}\nEnd Date: {key_data['end_date']}\nAccess Info: {key_data['access_info']}"
+                self.key_status_text.value = (
+                    f"Key: {key}\n"
+                    f"Start Date: {key_data['start_date']}\n"
+                    f"End Date: {key_data['end_date']}\n"
+                    f"Access Info: {key_data['access_info']}"
+                )
                 self.page.update()
                 return
         self.key_status_text.value = "Invalid key."
