@@ -2,3 +2,5 @@ Flet
 psutil
 GPUtil
 bcrypt
+pytest
+setuptools
