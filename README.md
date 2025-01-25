@@ -1,3 +1,5 @@
+![]([https://example.com/logo.png](https://github.com/HileZ360/CryptGuardian/blob/main/background_image.jpg))
+
 # 🎉 Welcome to **CryptGuardian** 🎉
 
 **CryptGuardian** is a comprehensive security-focused application providing a user-friendly **GUI** for authentication, key management, and system information display. Below is an in-depth overview of its functionality, technical details, and future enhancements.
